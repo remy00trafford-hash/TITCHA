@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 type CourseDocument = { id: string; title: string; processing_status: string };
@@ -16,7 +15,6 @@ const tasks: { id: Task; label: string }[] = [
 ];
 
 export default function ProfIAPage() {
-  const searchParams = useSearchParams();
   const [documents, setDocuments] = useState<CourseDocument[]>([]);
   const [documentId, setDocumentId] = useState('');
   const [task, setTask] = useState<Task>('answer');
@@ -40,12 +38,12 @@ export default function ProfIAPage() {
       if (error) setMessage(error.message);
       const rows = (data ?? []) as CourseDocument[];
       setDocuments(rows);
-      const requested = searchParams.get('document');
+      const requested = new URLSearchParams(window.location.search).get('document');
       setDocumentId(requested && rows.some(row => row.id === requested) ? requested : rows[0]?.id ?? '');
     }
     void load();
     return () => { active = false; };
-  }, [searchParams]);
+  }, []);
 
   async function run() {
     if (!documentId) { setMessage('Importe et traite d’abord un cours dans Mes documents.'); return; }
