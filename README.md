@@ -1,56 +1,82 @@
-# TITCHA — MVP éducatif
+# TITCHA
 
-Application Next.js / React / TypeScript destinée aux élèves béninois : 4e, 3e, Première et Terminale (séries A/B/C/D au lycée). Matières initiales : SVT et Histoire-Géographie.
+Application web d'apprentissage et de révision pour les élèves du secondaire au Bénin. Stack : Next.js 15, React 19, TypeScript et Supabase.
 
-## Configuration locale
+## Fonctionnalités MVP
 
-1. Installer Node.js 20.9 ou supérieur.
-2. Exécuter `npm install`.
-3. Copier `.env.example` vers `.env.local`.
-4. Renseigner la clé **publishable** du projet Supabase indiqué ci-dessous.
-5. Exécuter `npm run dev`.
+- Inscription et connexion par e-mail avec Supabase Auth.
+- Espace élève et navigation vers les matières, documents, Prof IA, révisions, points et méthodologie.
+- Import privé de cours PDF, JPEG, PNG et WEBP.
+- OCR Gemini via l'Edge Function `process-course-document`, avec stockage du texte extrait dans `course_documents`.
+- Prof IA connecté à Gemini : question/réponse, explication et résumé basés sur un cours extrait.
+- Génération de quiz de 10 questions, stockage des questions et des clés de correction côté serveur, correction et sauvegarde des tentatives.
+- Historique des points (alimenté lorsque les règles d'attribution seront définies).
 
-**Projet Supabase configuré pour ce MVP :** `htkynieftrrkdylcuzyt`.
+## Supabase
 
-## Fonctionnalités présentes dans le code
+Projet : `htkynieftrrkdylcuzyt`.
 
-- Pages d'accueil, inscription, connexion, tableau de bord, matières, documents, Prof IA, révisions, points, méthodologie et profil.
-- Clients Supabase navigateur et serveur, gestion de session, callback d'authentification, déconnexion et réinitialisation du mot de passe.
-- Import privé de PDF/JPEG/PNG/WEBP jusqu'à 20 Mo, création de l'enregistrement du document puis déclenchement de l'OCR.
-- Page Prof IA : question-réponse, explication, résumé et génération de quiz à partir d'un cours traité.
-- Révisions locales : cartes, rappels espacés simplifiés, textes à trous, lecture vocale du navigateur et impression A4.
+Edge Functions actives :
+- `process-course-document` (JWT obligatoire)
+- `titcha-ai` (JWT obligatoire)
 
-## Services Supabase
-
-- `process-course-document` : extraction OCR multimodale via Gemini.
-- `titcha-ai` : réponses, explications, résumés et génération de quiz via Gemini.
-- Tables de cours, documents, quiz, tentatives, points, profils et révisions avec RLS.
-- Bucket Storage privé `student-documents`.
-
-La présence du secret `GEMINI_API_KEY` a été vérifiée dans Supabase. Cela ne prouve pas encore que la clé est valide ni que les appels IA fonctionnent en production : un test de bout en bout reste nécessaire.
-
-## Configuration des secrets
-
-Dans Supabase → Edge Functions → Secrets, vérifier la présence de :
-
+Secrets requis dans **Supabase → Edge Functions → Secrets** :
 - `GEMINI_API_KEY`
 
-La clé Gemini reste côté serveur dans Supabase. Ne jamais la placer dans `.env.local`, le code frontend, GitHub ou une variable `NEXT_PUBLIC_`. Ne jamais exposer une clé `service_role` / `sb_secret`.
+La clé Gemini et la clé `service_role` restent exclusivement côté serveur. Ne jamais les ajouter au frontend, à GitHub ou à une variable `NEXT_PUBLIC_*`.
 
-## Commandes de validation
+Deux fonctions SQL sécurisées sont utilisées pour sauvegarder et corriger les quiz :
+- `public.titcha_save_quiz`
+- `public.titcha_grade_quiz`
 
-- `npm run typecheck`
-- `npm run build`
+Elles sont en SECURITY DEFINER et leur exécution est réservée au rôle `service_role`.
 
-Ces commandes doivent être exécutées après installation réussie des dépendances. Elles ne sont pas encore validées dans cet environnement.
+## Variables d'environnement
 
-## Restant à finaliser
+Copier `.env.example` vers `.env.local` en local, ou définir ces deux variables dans Vercel :
 
-- Renseigner la clé publishable Supabase dans l'environnement de déploiement.
-- Tester réellement import, OCR Gemini, Prof IA et erreurs avec un compte utilisateur.
-- Vérifier inscription, connexion, récupération de mot de passe et profil.
-- Persister les révisions et les résultats/quiz dans la base lorsque les écrans concernés sont finalisés.
-- Tester les politiques RLS, les erreurs, les limites d'usage et le parcours mobile.
-- Déployer sur Vercel puis vérifier la prévisualisation et la production.
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://htkynieftrrkdylcuzyt.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=VOTRE_CLE_PUBLISHABLE_SUPABASE
+```
 
-Le MVP n'active aucun paiement réel. Prévoir des limites d'usage et surveiller les coûts des API avant une ouverture publique.
+La clé publishable peut être récupérée dans Supabase → Project Settings → API Keys → Publishable key. Ne pas utiliser une clé secrète ou service role dans le navigateur.
+
+## Déploiement Vercel
+
+- Framework : Next.js
+- Root Directory : `./` (racine du dépôt)
+- Build Command : `npm run build`
+- Install Command : `npm install`
+- Node.js : 20.x ou supérieur
+- Ajouter les deux variables publiques ci-dessus dans Production, Preview et Development.
+- Déployer la branche `main`.
+
+Dans Supabase → Authentication → URL Configuration, ajouter l'URL de production Vercel à **Site URL** et aux **Redirect URLs**. Autoriser aussi l'URL de preview si nécessaire. Vérifier la configuration de confirmation e-mail selon le parcours de test choisi.
+
+## Validation
+
+```bash
+npm install
+npm run typecheck
+npm run build
+```
+
+Le workflow GitHub Actions `.github/workflows/ci.yml` exécute automatiquement ces trois étapes à chaque push sur `main`.
+
+## Parcours de premier test
+
+1. Ouvrir l'URL Vercel et créer un compte élève.
+2. Confirmer l'e-mail si la confirmation Supabase est activée, puis se connecter.
+3. Ouvrir **Documents**, importer un petit PDF de cours (moins de 5 Mo pour le premier essai).
+4. Vérifier que l'état passe à **Traité** et que le texte extrait est consultable.
+5. Ouvrir **Prof IA**, sélectionner ce cours et tester une question, puis Résumer et Expliquer.
+6. Ouvrir **Révisions**, générer le quiz, répondre aux 10 questions et valider.
+7. Vérifier le résultat et l'historique dans **Points** (aucun barème automatique n'est encore configuré).
+
+## Limites connues du MVP
+
+- Un test réel de bout en bout avec un compte utilisateur et un fichier est encore nécessaire après déploiement.
+- La validité effective de la clé Gemini et les quotas API doivent être confirmés par ce test.
+- Les révisions/quiz sont enregistrés, mais les rappels espacés avancés et le barème de points ne sont pas encore activés.
+- Le produit ne comprend pas de paiement réel.
