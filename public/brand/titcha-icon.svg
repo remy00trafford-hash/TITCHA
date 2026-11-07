@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>TITCHA — icône livre ouvert</title>
+<rect x="5" y="5" width="118" height="118" rx="28" fill="#315CFF"/>
+<path d="M64 20 108 45v50l-44 25L20 95V45Z" fill="#FFFFFF" opacity=".14"/>
+<path d="M64 48c-12-9-25-10-37-5v34c13-5 25-4 37 5V48Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+<path d="M64 48c12-9 25-10 37-5v34c-13-5-25-4-37 5V48Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+<path d="M64 48v34" stroke="#315CFF" stroke-width="3" stroke-linecap="round"/>
+<path d="M35 53c8-2 16 0 22 4M35 62c8-2 16 0 22 4M93 53c-8-2-16 0-22 4M93 62c-8-2-16 0-22 4" stroke="#315CFF" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="101" cy="30" r="13" fill="#FF765E"/>
+</svg>
