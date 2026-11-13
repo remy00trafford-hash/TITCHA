@@ -22,7 +22,7 @@ export default function AuthForm({mode}:{mode:'login'|'signup'}) {
    if(signup){
     const{data,error}=await sb.auth.signUp({email:email.trim(),password:pw,options:{data:{full_name:name.trim()}}});
     if(error)throw error;
-    if(data.session){setMsg('Ton compte est créé et ta session est ouverte.');router.push('/tableau-de-bord');}
+    if(data.session){setMsg('Compte créé. Ouverture de ton espace…');window.location.assign('/tableau-de-bord');}
     else {setSent(true);setMsg('Compte créé ! Un e-mail de confirmation vient de t’être envoyé. Ouvre-le et clique sur le lien « Confirmer mon adresse e-mail ». Tu reviendras ensuite sur TITCHA : connecte-toi avec la même adresse et le même mot de passe.');}
    } else {
     const{error}=await sb.auth.signInWithPassword({email:email.trim(),password:pw});
@@ -32,7 +32,7 @@ export default function AuthForm({mode}:{mode:'login'|'signup'}) {
      if(m.includes('invalid login credentials')) throw new Error('Adresse e-mail ou mot de passe incorrect. Vérifie tes informations ou crée un compte si tu n’en as pas encore.');
      throw error;
     }
-    router.push('/tableau-de-bord');router.refresh();
+    window.location.assign('/tableau-de-bord');
    }
   } catch(e){setMsg(e instanceof Error?e.message:'Une erreur est survenue. Réessaie.');}
   finally{setBusy(false);}
