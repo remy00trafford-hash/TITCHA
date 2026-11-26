@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
   );
 
   // Vérifie le JWT et renouvelle la session si nécessaire.
-  await supabase.auth.getClaims();
+  await supabase.auth.getUser();
 
   response.headers.set('Cache-Control', 'private, no-store');
   return response;
