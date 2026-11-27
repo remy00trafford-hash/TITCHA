@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {useState} from 'react';
+import {Globe2,Dna,PenLine} from 'lucide-react';
 
 const guides = {
  hg: {
@@ -39,10 +40,10 @@ export default function MethodologiePage(){
  const [subject,setSubject]=useState<Subject>('hg'); const [open,setOpen]=useState(0); const guide=guides[subject];
  return <main className="wrap methodology-page">
   <section className="methodology-hero"><span className="welcome-eyebrow">APPRENDRE À RÉDIGER AVEC MÉTHODE</span><h1>Découvrir les méthodologies</h1><p>Des guides progressifs pour construire un devoir clair, organisé et argumenté.</p><Link href="/tableau-de-bord" className="method-back">← Mon espace</Link></section>
-  <div className="method-tabs" role="tablist" aria-label="Choisir une matière"><button role="tab" aria-selected={subject==='hg'} className={subject==='hg'?'active':''} onClick={()=>{setSubject('hg');setOpen(0);}}>🌍 Histoire-Géographie</button><button role="tab" aria-selected={subject==='svt'} className={subject==='svt'?'active':''} onClick={()=>{setSubject('svt');setOpen(0);}}>🧬 SVT</button></div>
-  <section className="method-intro"><span className="method-subject-icon">{subject==='hg'?'🌍':'🧬'}</span><div><h2>{guide.title}</h2><p>{guide.intro}</p></div></section>
+  <div className="method-tabs" role="tablist" aria-label="Choisir une matière"><button role="tab" aria-selected={subject==='hg'} className={subject==='hg'?'active':''} onClick={()=>{setSubject('hg');setOpen(0);}}><Globe2 size={17} aria-hidden="true"/> Histoire-Géographie</button><button role="tab" aria-selected={subject==='svt'} className={subject==='svt'?'active':''} onClick={()=>{setSubject('svt');setOpen(0);}}><Dna size={17} aria-hidden="true"/> SVT</button></div>
+  <section className="method-intro"><span className="method-subject-icon">{subject==='hg'?<Globe2 size={30}/>:<Dna size={30}/>}</span><div><h2>{guide.title}</h2><p>{guide.intro}</p></div></section>
   <section className="method-learning"><div className="method-steps"><div className="method-section-heading"><span>GUIDE PAS À PAS</span><h2>Construire ton devoir</h2></div>{guide.steps.map(([title,description],i)=><article className={'method-step '+(open===i?'expanded':'')} key={title}><button onClick={()=>setOpen(open===i?-1:i)} aria-expanded={open===i}><span className="method-number">{String(i+1).padStart(2,'0')}</span><b>{title}</b><span className="method-chevron">{open===i?'−':'+'}</span></button>{open===i&&<p>{description}</p>}</article>)}</div>
-   <aside className="method-aside"><span>✍️</span><h3>Exemple de raisonnement</h3><pre>{guide.example}</pre><h3>Erreurs à éviter</h3><ul>{guide.avoid.map(item=><li key={item}>{item}</li>)}</ul></aside></section>
+   <aside className="method-aside"><span><PenLine size={25}/></span><h3>Exemple de raisonnement</h3><pre>{guide.example}</pre><h3>Erreurs à éviter</h3><ul>{guide.avoid.map(item=><li key={item}>{item}</li>)}</ul></aside></section>
   <p className="method-note">Ces fiches sont un guide de travail. Les consignes de ton professeur et les exigences de ton programme restent prioritaires.</p>
  </main>;
 }
