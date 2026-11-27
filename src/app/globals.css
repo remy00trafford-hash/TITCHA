@@ -142,3 +142,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .prof-summary-link{display:block;margin:12px 0;padding:12px;border-radius:12px;background:#fff0e9;color:#b64e37;font-size:12px;font-weight:900;text-align:center}
 @keyframes voice-bars{from{transform:scaleY(.35)}to{transform:scaleY(2.8)}}@keyframes titcha-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(12deg)}}
 @media(max-width:760px){.revision-hero,.methodology-hero{padding:28px 23px}.revision-create{padding:22px 18px}.revision-actions,.revision-resource-grid,.method-learning{grid-template-columns:1fr}.revision-main-action,.revision-quiz-action{min-height:140px}.method-intro{padding:19px}}
+
+/* TITCHA — cohérence typographique et traitement des pictogrammes */
+.prof-task span,.document-file-icon,.upload-illustration,.upload-cloud{flex:0 0 auto;display:inline-grid;place-items:center;border-radius:12px;line-height:1}
+.prof-task span{width:30px;height:30px;background:#eef1ff;font-size:15px}
+.prof-task.active span{background:#ffffff28}
+.prof-summary-link{width:100%;border:1px solid #ffe0d5;font:inherit;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.prof-summary-link:hover:not(:disabled){background:#ffe8df;border-color:#ffc8b8;transform:translateY(-1px)}
+.prof-summary-link:disabled{opacity:.55;cursor:not-allowed}
+.document-file-icon{font-size:19px}
+.upload-illustration{font-size:22px}
