@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
+import { BookOpen, LockKeyhole } from 'lucide-react';
 
 export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
   const [email, setEmail] = useState('');
@@ -57,8 +58,8 @@ export default function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         <div className="section-kicker">BIENVENUE SUR TITCHA</div>
         <h1>{signup ? 'Crée ton espace pour apprendre.' : 'Heureux de te retrouver.'}</h1>
         <p className="auth-guide-lead">{signup ? 'Quelques informations suffisent pour commencer.' : 'Retrouve tes cours, ton professeur IA et tes révisions.'}</p>
-        <div className="auth-guide-card"><span className="guide-icon">📚</span><div><b>Tous tes outils au même endroit</b><p>Documents, explications et exercices réunis dans un seul espace.</p></div></div>
-        <div className="auth-guide-card"><span className="guide-icon">🔒</span><div><b>Un espace personnel</b><p>Ton travail et tes documents restent associés à ton compte.</p></div></div>
+        <div className="auth-guide-card"><span className="guide-icon"><BookOpen size={19}/></span><div><b>Tous tes outils au même endroit</b><p>Documents, explications et exercices réunis dans un seul espace.</p></div></div>
+        <div className="auth-guide-card"><span className="guide-icon"><LockKeyhole size={19}/></span><div><b>Un espace personnel</b><p>Ton travail et tes documents restent associés à ton compte.</p></div></div>
       </aside>
       <section className="card auth-card">
         <div className="auth-card-heading"><h2>{signup ? 'Créer mon compte' : 'Connexion'}</h2><p className="muted">{signup ? 'Renseigne les champs pour commencer.' : 'Entre tes identifiants pour retrouver ton espace.'}</p></div>
