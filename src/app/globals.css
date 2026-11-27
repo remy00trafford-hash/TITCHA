@@ -178,3 +178,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .revision-main-action>span,.revision-quiz-action>span,.revision-resource>span{width:42px;height:42px;border-radius:12px;}
 .dashboard-tip>span{color:#b77928;line-height:1;}
 .auth-guide-card .guide-icon{font-size:initial;}
+
+/* Typography system: clear hierarchy, comfortable reading and responsive headings. */
+body{font-size:15px;line-height:1.6;letter-spacing:-.008em}
+h1,h2,h3,h4{font-weight:750;line-height:1.16;text-wrap:balance}
+p{line-height:1.7}
+button,a,input,textarea,select{letter-spacing:inherit}
+@media(max-width:640px){body{font-size:14px}h1,h2,h3,h4{letter-spacing:-.02em}}
