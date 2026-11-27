@@ -1,41 +1,11 @@
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-
-const tools = [
-  { href: '/documents', icon: '📂', title: 'Mes cours', text: 'Importe tes supports et retrouve-les au même endroit.', tone: 'violet', action: 'Gérer mes cours' },
-  { href: '/prof-ia', icon: '🧑🏾‍🏫', title: 'Professeur IA', text: 'Pose une question et obtiens une explication fondée sur ton cours.', tone: 'peach', action: 'Parler au professeur' },
-  { href: '/revisions', icon: '🎯', title: 'Révisions & quiz', text: 'Entraîne-toi, réponds et consulte tes corrections.', tone: 'mint', action: 'Lancer une révision' },
-  { href: '/matieres', icon: '📚', title: 'Mes matières', text: 'Accède aux matières disponibles dans ton espace.', tone: 'blue', action: 'Voir mes matières' },
-];
-
-export default async function DashboardPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/connexion');
-  const name = user.user_metadata?.full_name?.split(' ')[0] || 'élève';
-  const [{ count: documentCount }, { data: points }] = await Promise.all([
-    supabase.from('course_documents').select('id', { count: 'exact', head: true }).eq('owner_id', user.id),
-    supabase.from('points_ledger').select('points').eq('student_id', user.id),
-  ]);
-  const totalPoints = (points ?? []).reduce((sum, item) => sum + (item.points || 0), 0);
-
-  return <main className="wrap dashboard-page">
-    <header className="dashboard-header"><Link className="brand" href="/tableau-de-bord">TITCHA<span>.</span></Link><div className="dashboard-user"><span className="user-avatar">{name.slice(0, 1).toUpperCase()}</span><span>Mon espace</span></div></header>
-    <section className="dashboard-welcome">
-      <div className="welcome-copy"><span className="welcome-eyebrow">TON ESPACE PERSONNEL</span><h1>Bonjour {name} <span className="wave-hand">👋</span></h1><p>Prêt à faire progresser tes connaissances aujourd’hui ? Choisis une activité et avance à ton rythme.</p>
-        <div className="welcome-actions"><Link className="btn dashboard-primary" href="/revisions">Commencer à réviser <span>→</span></Link><Link className="dashboard-secondary" href="/documents">Importer un cours</Link></div>
-      </div>
-      <div className="welcome-illustration" aria-hidden="true"><div className="welcome-orbit orbit-a" /><div className="welcome-orbit orbit-b" /><div className="welcome-note"><span>✦</span><div><b>Chaque progrès compte</b><small>Un pas après l’autre</small></div></div><div className="welcome-book">📖</div><div className="welcome-spark">✧</div></div>
-    </section>
-    <section className="dashboard-stats" aria-label="Résumé de ton activité">
-      <article className="stat-tile"><span className="stat-icon stat-violet">📄</span><div><strong>{documentCount ?? 0}</strong><span>Cours importés</span></div></article>
-      <article className="stat-tile"><span className="stat-icon stat-gold">⭐</span><div><strong>{totalPoints}</strong><span>Points gagnés</span></div></article>
-      <article className="stat-tile"><span className="stat-icon stat-mint">🚀</span><div><strong>{(documentCount ?? 0) > 0 ? 'En route' : 'À démarrer'}</strong><span>Ton parcours</span></div></article>
-    </section>
-    <section className="dashboard-tools-section"><div className="dashboard-section-heading"><div><span className="welcome-eyebrow">TES OUTILS</span><h2>Par quoi veux-tu commencer ?</h2></div><p>Tout est organisé pour t’aider à comprendre et à progresser.</p></div>
-      <div className="dashboard-tools-grid">{tools.map(tool => <Link href={tool.href} className="dashboard-tool-card" key={tool.href}><span className={`tool-icon ${tool.tone}`}>{tool.icon}</span><h3>{tool.title}</h3><p>{tool.text}</p><span className="tool-action">{tool.action} <b>↗</b></span></Link>)}</div>
-    </section>
-    <section className="dashboard-bottom"><div className="dashboard-tip"><span>💡</span><div><b>Un conseil pour mieux apprendre</b><p>Importe d’abord un cours. Le Professeur IA et les quiz pourront ensuite s’appuyer sur son contenu.</p></div></div><Link className="dashboard-method" href="/methodologie">Découvrir la méthodologie <span>→</span></Link></section>
-  </main>;
-}
+import Link from 'next/link';import {redirect} from 'next/navigation';import {createClient} from '@/lib/supabase/server';
+export default async function DashboardPage(){const sb=await createClient();const {data:{user}}=await sb.auth.getUser();if(!user)redirect('/connexion');const name=user.user_metadata?.full_name?.split(' ')[0]||'élève';const {count}=await sb.from('course_documents').select('id',{count:'exact',head:true}).eq('owner_id',user.id);const courses=count??0;
+return <main className="wrap dashboard-page"><header className="dashboard-header"><Link className="brand" href="/tableau-de-bord">TITCHA<span>.</span></Link><div className="dashboard-user"><span className="user-avatar">{name.slice(0,1).toUpperCase()}</span><span>Mon espace</span></div></header>
+<section className="dashboard-welcome"><div className="welcome-copy"><span className="welcome-eyebrow">TON ESPACE PERSONNEL</span><h1>Bonjour {name} <span className="wave-hand">👋</span></h1><p>Transforme chaque cours en un résumé clair, puis apprends l’essentiel et vérifie tes acquis.</p><div className="welcome-actions"><Link className="btn dashboard-primary" href="/documents">Importer un cours <span>→</span></Link><Link className="dashboard-secondary" href="/revisions">Mes révisions</Link></div></div><div className="welcome-illustration" aria-hidden="true"><div className="welcome-orbit orbit-a"/><div className="welcome-orbit orbit-b"/><div className="welcome-note"><span>✦</span><div><b>Comprendre l’essentiel</b><small>Un cours à la fois</small></div></div><div className="welcome-book">📝</div><div className="welcome-spark">✧</div></div></section>
+<section className="dashboard-stats"><article className="stat-tile"><span className="stat-icon stat-violet">📚</span><div><strong>{courses}</strong><span>Cours importés</span></div></article><article className="stat-tile"><span className="stat-icon stat-gold">📝</span><div><strong>{courses?'À résumer':'À démarrer'}</strong><span>Résumés de cours</span></div></article><article className="stat-tile"><span className="stat-icon stat-mint">🎯</span><div><strong>À ton rythme</strong><span>Ton parcours</span></div></article></section>
+<section className="dashboard-tools-section"><div className="dashboard-section-heading"><div><span className="welcome-eyebrow">TON PARCOURS</span><h2>Commence par l’essentiel</h2></div><p>Le résumé de cours est au cœur de TITCHA. Les autres outils t’aident à mémoriser et progresser.</p></div><div className="dashboard-tools-grid">
+<Link href="/documents" className="dashboard-tool-card dashboard-tool-primary"><span className="tool-icon violet">📝</span><span className="tool-label">FONCTION PRINCIPALE</span><h3>Résumer mes cours</h3><p>Importe un PDF ou une photo et transforme son contenu en résumé structuré.</p><span className="tool-action">Créer un résumé <b>↗</b></span></Link>
+<Link href="/prof-ia" className="dashboard-tool-card"><span className="tool-icon peach">🧑🏾‍🏫</span><h3>Apprendre mon cours</h3><p>Fais-toi expliquer les notions, pose des questions et écoute les réponses.</p><span className="tool-action">Ouvrir le professeur <b>↗</b></span></Link>
+<Link href="/revisions" className="dashboard-tool-card"><span className="tool-icon mint">🎯</span><h3>Vérifier mes acquis</h3><p>Entraîne-toi avec des quiz générés à partir de tes documents.</p><span className="tool-action">M’entraîner <b>↗</b></span></Link>
+<Link href="/methodologie" className="dashboard-tool-card"><span className="tool-icon blue">📖</span><h3>Découvrir les méthodologies</h3><p>Apprends à organiser une dissertation en histoire-géographie et une rédaction scientifique en SVT.</p><span className="tool-action">Consulter les guides <b>↗</b></span></Link></div></section>
+<section className="dashboard-bottom"><div className="dashboard-tip"><span>💡</span><div><b>La méthode TITCHA</b><p>1. Importe ton cours. 2. Obtiens un résumé fidèle. 3. Apprends les notions. 4. Vérifie tes acquis.</p></div></div></section></main>}
