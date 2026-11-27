@@ -21,20 +21,22 @@ const guides = {
   title: 'Rédaction scientifique argumentée en SVT',
   intro: 'En SVT, la réponse construite suit une démarche scientifique. Selon la consigne de l’enseignant, elle peut prendre la forme d’une composition ou d’une dissertation scientifique : le raisonnement et l’exploitation des données priment.',
   steps: [
-   ['Lire la consigne','Identifie le phénomène à expliquer et le verbe de consigne : expliquer, montrer, comparer, justifier ou discuter. Délimite exactement ce qui est demandé.'],
-   ['Formuler le problème scientifique','Écris la question scientifique à laquelle ton devoir doit répondre. Si la consigne le demande, formule une hypothèse testable.'],
-   ['Organiser connaissances et données','Rassemble les notions du cours, observations, résultats d’expériences, graphiques et schémas utiles. Prépare un plan logique.'],
-   ['Introduire le devoir','Présente brièvement le contexte, reformule le problème scientifique et annonce les étapes du raisonnement.'],
-   ['Développer avec des preuves','Pour chaque idée, présente le fait ou la donnée, décris l’observation, interprète-la avec les connaissances du cours et montre ce qu’elle permet de conclure. Ajoute un schéma légendé s’il aide la démonstration.'],
-   ['Conclure scientifiquement','Réponds clairement au problème posé. Indique si l’hypothèse est validée, rejetée ou à nuancer lorsque cela s’applique.']
+   ['Observer et relever les faits','Pars de la situation proposée. Relève les données et faits significatifs sans les interpréter trop tôt.'],
+   ['Formuler le problème scientifique','Transforme les faits observés en une ou plusieurs questions scientifiques précises.'],
+   ['Proposer des hypothèses','Énonce des explications provisoires qui peuvent être confrontées aux données ou vérifiées.'],
+   ['Prévoir une démarche','Propose les actions, expériences, comparaisons ou recherches qui permettraient de tester les hypothèses.'],
+   ['Exploiter les résultats','Présente les résultats ou documents utiles, décris les observations et interprète-les avec les connaissances du cours.'],
+   ['Construire la réponse et conclure','Organise les arguments dans un texte scientifiquement juste. Réponds au problème et précise ce que les résultats permettent réellement d’affirmer.']
   ],
   example: 'Observation : après suppression d’une structure, le phénomène étudié diminue.\nInterprétation : cette structure intervient dans le mécanisme, mais cette observation seule ne prouve pas qu’elle en est l’unique cause.\nConclusion : les résultats soutiennent son rôle ; il faut confronter cette conclusion aux autres données disponibles.',
   avoid: ['Réciter des définitions sans les relier au problème','Confondre observation et interprétation','Décrire un graphique sans exploiter ses tendances','Affirmer une causalité à partir d’une simple corrélation','Oublier les unités, axes ou conditions expérimentales']
  }
 };
 
+type Subject = keyof typeof guides;
+
 export default function MethodologiePage(){
- const [subject,setSubject]=useState('hg'); const [open,setOpen]=useState(0); const guide=guides[subject];
+ const [subject,setSubject]=useState<Subject>('hg'); const [open,setOpen]=useState(0); const guide=guides[subject];
  return <main className="wrap methodology-page">
   <section className="methodology-hero"><span className="welcome-eyebrow">APPRENDRE À RÉDIGER AVEC MÉTHODE</span><h1>Découvrir les méthodologies</h1><p>Des guides progressifs pour construire un devoir clair, organisé et argumenté.</p><Link href="/tableau-de-bord" className="method-back">← Mon espace</Link></section>
   <div className="method-tabs" role="tablist" aria-label="Choisir une matière"><button role="tab" aria-selected={subject==='hg'} className={subject==='hg'?'active':''} onClick={()=>{setSubject('hg');setOpen(0);}}>🌍 Histoire-Géographie</button><button role="tab" aria-selected={subject==='svt'} className={subject==='svt'?'active':''} onClick={()=>{setSubject('svt');setOpen(0);}}>🧬 SVT</button></div>
