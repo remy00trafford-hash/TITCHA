@@ -41,7 +41,7 @@ Deno.serve(async(req:Request)=>{
   try{result=await callModel(model,3);}
   catch(primaryError){
    const status=(primaryError as {status?:number})?.status??0;
-   const fallbackModel=Deno.env.get("GEMINI_VISION_FALLBACK_MODEL")||"gemini-3.6-flash";
+   const fallbackModel=Deno.env.get("GEMINI_VISION_FALLBACK_MODEL")||"gemini-3.7-flash";
    if((status===404||retryable(status))&&fallbackModel!==model){
     console.warn("Primary Gemini model unavailable; trying fallback", {model,fallbackModel,status});
     result=await callModel(fallbackModel,2);
