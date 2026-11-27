@@ -152,3 +152,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .prof-summary-link:disabled{opacity:.55;cursor:not-allowed}
 .document-file-icon{font-size:19px}
 .upload-illustration{font-size:22px}
+
+/* Identité visuelle — icônes vectorielles Lucide et hiérarchie typographique */
+.prof-task,.prof-summary-link,.speak-button,.prof-send,.document-actions .btn,.upload-actions p,.upload-illustration,.upload-cloud,.document-file-icon,.document-status,.document-delete,.summary-result h2,.empty-documents>span{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.prof-task span{display:inline-flex;align-items:center;justify-content:center}
+.document-status{gap:5px}.document-file-icon{color:#536bff}.upload-illustration,.upload-cloud{color:#536bff}.upload-actions p{justify-content:flex-start}
+.prof-empty>span,.empty-documents>span{color:#536bff}
+/* Typographie : hiérarchie, rythme et lisibilité */
+body{font-size:15px;line-height:1.6;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,4vw,2.8rem);font-weight:750;line-height:1.12;letter-spacing:-.045em}
+h2{font-size:clamp(1.25rem,2vw,1.65rem);font-weight:700;line-height:1.25;letter-spacing:-.03em}
+h3{font-size:1.1rem;font-weight:680;line-height:1.35;letter-spacing:-.02em}
+p{line-height:1.7}
+button,a,input,textarea,select{letter-spacing:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #315cff55;outline-offset:3px}
