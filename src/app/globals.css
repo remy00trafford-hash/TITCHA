@@ -248,3 +248,32 @@ button,a,input,textarea,select{letter-spacing:inherit}
   .dashboard-tool-primary h3{font-size:18px}
   .dashboard-tool-primary p{font-size:11px;min-height:0}
 }
+
+
+/* Course metadata: lightweight academic context without changing the existing visual identity. */
+.course-metadata-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:18px 0;
+}
+.course-metadata-field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  color:#26324b;
+  font-size:12px;
+  font-weight:750;
+}
+.course-metadata-field>span{
+  color:#7b8498;
+  font-size:10px;
+  font-weight:500;
+}
+.course-metadata-field .field{
+  width:100%;
+  min-width:0;
+}
+@media(max-width:620px){
+  .course-metadata-grid{grid-template-columns:1fr;gap:11px}
+}
