@@ -2,7 +2,7 @@
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
 import {createClient} from '@/lib/supabase/client';
-import {GitBranch,BookOpen,RefreshCw,ArrowDown,ChevronRight} from 'lucide-react';
+import {GitBranch,RefreshCw,ArrowDown,ChevronRight} from 'lucide-react';
 
 type Course={id:string;title:string;school_class_id:number|null;subject_id:number|null;school_classes?:{label:string}|null;subjects?:{name:string}|null};
 type DiagramNode={id:string;label:string;detail?:string};
@@ -13,7 +13,7 @@ function parseDiagram(raw:string):Diagram{
  const cleaned=raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();
  const value=JSON.parse(cleaned);
  if(!value||!Array.isArray(value.nodes)||value.nodes.length<2||value.nodes.length>12)throw new Error('Le schéma reçu est incomplet. Relance la génération.');
- return value as Diagram;
+ value.edges=Array.isArray(value.edges)?value.edges:[];value.legend=Array.isArray(value.legend)?value.legend:[];return value as Diagram;
 }
 export default function SchemasPage(){
  const [courses,setCourses]=useState<Course[]>([]);
@@ -35,7 +35,7 @@ export default function SchemasPage(){
   </section>
   {diagram&&<section className="diagram-result"><div className="diagram-result-heading"><div><span className="welcome-eyebrow">REPRÉSENTATION PÉDAGOGIQUE</span><h2>{diagram.title}</h2><p>{diagram.description}</p></div><button className="btn alt" onClick={()=>void generate()} disabled={busy}><RefreshCw size={14}/> Refaire</button></div>
    <div className={'diagram-flow diagram-'+diagram.diagram_type}>{diagram.nodes.map((node,index)=><div className="diagram-step-wrap" key={node.id}><article className="diagram-node"><span className="diagram-node-number">{String(index+1).padStart(2,'0')}</span><h3>{node.label}</h3>{node.detail&&<p>{node.detail}</p>}</article>{index<diagram.nodes.length-1&&<div className="diagram-connector"><ArrowDown size={18}/>{diagram.edges.find(edge=>edge.from===node.id&&edge.to===diagram.nodes[index+1].id)?.label&&<small>{diagram.edges.find(edge=>edge.from===node.id&&edge.to===diagram.nodes[index+1].id)?.label}</small>}</div>}</div>)}</div>
-   {diagram.legend?.length>0&&<div className="diagram-legend"><b>À retenir</b><ul>{diagram.legend.map((item,index)=><li key={index}>{item}</li>)}</ul></div>}
+   {diagram.legend&&diagram.legend.length>0&&<div className="diagram-legend"><b>À retenir</b><ul>{diagram.legend.map((item,index)=><li key={index}>{item}</li>)}</ul></div>}
    <p className="diagram-note">Schéma construit à partir du cours sélectionné. Vérifie les relations et les légendes avec ton support de classe.</p>
   </section>}
   <div className="schemas-back"><Link href="/prof-ia">Retour au professeur IA <ChevronRight size={14}/></Link><Link href="/documents">Ma bibliothèque <ChevronRight size={14}/></Link></div>
